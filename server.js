@@ -4,11 +4,15 @@ const path = require('path')
 const fs = require('fs')
 const cors = require('cors')
 
-const targetDir = 'E:/FILM/Anime'
+// const targetDir = 'E:/FILM/Anime'
+const targetDirs = ['E:/FILM/Anime', 'G:/Anime']
 const MY_SERVER = 'localhost:5000'
 
 app.use(express.json())
-app.use('/library', express.static(targetDir))
+for (const dir of targetDirs) {
+    app.use('/library', express.static(dir))
+}
+
 app.use(cors())
 
 app.get('/', (req, res) => {
@@ -16,19 +20,28 @@ app.get('/', (req, res) => {
 })
 
 app.get('/anime/all', (req, res) => {
-    const titles = fs.readdirSync(targetDir)
-    const covers = []
+    let titles = []
+    let covers = []
 
-    titles.forEach(title => {
-        const coverPath = path.join(targetDir, title, 'folder.jpg')
-        if (fs.existsSync(coverPath)) {
-            covers.push('http://' + path.join(`${MY_SERVER}/library`, title, 'folder.jpg'))
-        } else {
-            covers.push(null)
+    for (const dir of targetDirs) {
+        if (fs.existsSync(dir)) {
+            let dirTitles = fs.readdirSync(dir)
+            
+            dirTitles.forEach(title => {
+                const coverPath = path.join(dir, title, 'folder.jpg')
+                // console.log(title, coverPath)
+                if (fs.existsSync(coverPath)) {
+                    covers.push('http://' + path.join(`${MY_SERVER}/library`, title, 'folder.jpg'))
+                } else {
+                    covers.push(null)
+                }
+            })
+
+            titles = titles.concat(dirTitles)
         }
-    })
+    }
+
     res.json({
-        'dirname': targetDir,
         'titles': titles,
         'covers': covers
     })
@@ -37,12 +50,19 @@ app.get('/anime/all', (req, res) => {
 app.get('/anime/:title', (req, res) => {
     const { title } = req.params
     const AcceptedExtensions = ['mp4', 'mkv']
-    const dirname = path.join(targetDir, title) 
-    let epsLink = fs.readdirSync(dirname)
-    epsLink = epsLink.filter(eps => AcceptedExtensions.includes(eps.split('.').slice(-1)[0]))
+
+    let epsLink
+    for (const dir of targetDirs) {
+
+        const dirname = path.join(dir, title) 
+        if (fs.existsSync(dirname)) {
+            epsLink = fs.readdirSync(dirname)
+            epsLink = epsLink.filter(eps => AcceptedExtensions.includes(eps.split('.').slice(-1)[0]))
+            
+        }
+    }
 
     res.json({
-        'dirname': dirname,
         'title': title,
         'epsLink': epsLink
     })
