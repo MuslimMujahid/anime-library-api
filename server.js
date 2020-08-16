@@ -4,7 +4,6 @@ const path = require('path')
 const fs = require('fs')
 const cors = require('cors')
 
-// const targetDir = 'E:/FILM/Anime'
 const targetDirs = ['E:/FILM/Anime', 'G:/Anime']
 const MY_SERVER = 'localhost:5000'
 
@@ -29,7 +28,6 @@ app.get('/anime/all', (req, res) => {
             
             dirTitles.forEach(title => {
                 const coverPath = path.join(dir, title, 'folder.jpg')
-                // console.log(title, coverPath)
                 if (fs.existsSync(coverPath)) {
                     covers.push('http://' + path.join(`${MY_SERVER}/library`, title, 'folder.jpg'))
                 } else {
