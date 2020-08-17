@@ -5,7 +5,7 @@ const fs = require('fs')
 const cors = require('cors')
 
 const targetDirs = ['E:/FILM/Anime', 'G:/Anime']
-const MY_SERVER = 'localhost:5000'
+const API_SERVER = 'http://localhost:5000'
 
 app.use(express.json())
 for (const dir of targetDirs) {
@@ -45,6 +45,70 @@ app.get('/anime/all', (req, res) => {
     })
 })
 
+app.get('/anime/v2/all', (req, res) => {
+
+    const rawdata = fs.readFileSync('DB.json')
+    const db = JSON.parse(rawdata)
+
+    const data = []
+
+    for (let item of db) {
+        if (fs.existsSync(path.join(item.dirname, item.title))) {
+            let coverHttpPath
+            if (fs.existsSync(path.join(item.dirname, item.title, 'folder.jpg'))) {
+                coverHttpPath = API_SERVER + '/library/' + item.title + '/folder.jpg'
+            } else {
+                coverHttpPath = null
+            }
+            data.push({
+                'title': item.title,
+                'dirHttpPath': API_SERVER + '/library/' + item.title,
+                'coverHttpPath': coverHttpPath,
+                'status': item.status
+            })
+        }
+    }
+    
+    res.json({
+        'data': data
+    })
+})
+
+app.get('/anime/v2/all/:status', (req, res, next) => {
+
+    const { status } = req.params
+    const statusExpected = ['finished', 'unfinished', 'unwatched']
+
+    if (!statusExpected.includes(status)) {
+        res.send({})
+    } else {
+        const rawdata = fs.readFileSync('DB.json')
+        const db = JSON.parse(rawdata)
+        const dbFiltered = db.filter(item => item.status == status)
+        const data = []
+        for (let item of dbFiltered) {
+            if (fs.existsSync(path.join(item.dirname, item.title))) {
+                let coverHttpPath
+                if (fs.existsSync(path.join(item.dirname, item.title, 'folder.jpg'))) {
+                    coverHttpPath = API_SERVER + '/library/' + item.title + '/folder.jpg'
+                } else {
+                    coverHttpPath = null
+                }
+                data.push({
+                    'title': item.title,
+                    'dirHttpPath': API_SERVER + '/library/' + item.title,
+                    'coverHttpPath': coverHttpPath,
+                    'status': item.status
+                })
+            }
+        }
+        
+        res.json({
+            'data': data
+        })
+    }
+})
+
 app.get('/anime/:title', (req, res) => {
     const { title } = req.params
     const AcceptedExtensions = ['mp4', 'mkv']
@@ -63,6 +127,27 @@ app.get('/anime/:title', (req, res) => {
     res.json({
         'title': title,
         'epsLink': epsLink
+    })
+})
+
+app.get('/anime/v2/:title', (req, res) => {
+    const { title } = req.params
+    const AcceptedExtensions = ['mp4', 'mkv']
+
+    const rawdata = fs.readFileSync('DB.json')
+    const db = JSON.parse(rawdata)
+
+    const SelectByTitle = db.filter(item => item.title == title)[0]
+
+    const data = [] 
+    for (let item of SelectByTitle.eps) {
+        data.push({
+            'filename': item.epTitle,
+            'epHttpPath': API_SERVER + '/library/' + title + '/' + item.epTitle
+        })
+    }
+    res.json({
+        'data': data
     })
 })
 
