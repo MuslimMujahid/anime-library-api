@@ -1,6 +1,7 @@
 from os import listdir
 import json
 from os.path import join, isfile
+import operator
 
 targetDirs = ['E:/FILM/Anime', 'G:/Anime']
 
@@ -26,9 +27,11 @@ for targetDir in targetDirs:
         jsonArray.append({
             'dirname': targetDir,
             'title': dir,
-            'status': 'unfinished',
+            'status': 'unwatched',
             'eps': episodes
         })
+
+jsonArray = sorted(jsonArray, key=lambda k: k['title'])
 
 # print(jsonArray)
 with open('DB.json', 'w+') as output:

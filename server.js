@@ -143,7 +143,8 @@ app.get('/anime/v2/:title', (req, res) => {
     for (let item of SelectByTitle.eps) {
         data.push({
             'filename': item.epTitle,
-            'epHttpPath': API_SERVER + '/library/' + title + '/' + item.epTitle
+            'epHttpPath': API_SERVER + '/library/' + title + '/' + item.epTitle,
+            'watched': item.watched
         })
     }
     res.json({
@@ -151,7 +152,7 @@ app.get('/anime/v2/:title', (req, res) => {
     })
 })
 
-app.post('/anime/v2/update', (req, res) => {
+app.post('/anime/v2/update/status', (req, res) => {
     const { title, status } = req.body
     const rawdata = fs.readFileSync('DB.json')
     let db = JSON.parse(rawdata)
@@ -163,6 +164,33 @@ app.post('/anime/v2/update', (req, res) => {
     fs.writeFile('DB.json', JSON.stringify(db), () => {})
 
     res.json(db)
+})
+
+app.post('/anime/v2/update/watched', (req, res) => {
+    const { title, epTitle } = req.body
+    const rawdata = fs.readFileSync('DB.json')
+    let db = JSON.parse(rawdata)
+    let SelectByTitle = db.filter(item => item.title == title)[0]
+    db = db.filter(item => item.title != title)
+    let selectByEpTitle = SelectByTitle.eps.filter(ep => ep.epTitle == epTitle)[0]
+    SelectByTitle.eps = SelectByTitle.eps.filter(ep => ep.epTitle != epTitle)
+    selectByEpTitle.watched = !selectByEpTitle.watched 
+    SelectByTitle.eps = [...SelectByTitle.eps, selectByEpTitle]
+    SelectByTitle.eps = SelectByTitle.eps.sort((a, b) => { return (a.epTitle > b.epTitle ? 1 : -1) })
+    
+    if (SelectByTitle.eps.filter(ep => ep.watched == false).length == 0) {
+        SelectByTitle.status = 'finished'
+    } else if (SelectByTitle.eps.filter(ep => ep.watched == true).length == 0) {
+        SelectByTitle.status = 'unwatched'
+    } else {
+        SelectByTitle.status = 'unfinished'
+    }
+
+    db = [...db, SelectByTitle]
+    db = db.sort((a, b) => { return (a.title > b.title ? 1 : -1) })
+    fs.writeFile('DB.json', JSON.stringify(db), () => {})
+
+    res.send()
 })
 
 app.listen(5000)
