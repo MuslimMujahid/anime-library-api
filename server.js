@@ -58,7 +58,7 @@ app.get('/anime/v2/all', (req, res) => {
             if (fs.existsSync(path.join(item.dirname, item.title, 'folder.jpg'))) {
                 coverHttpPath = API_SERVER + '/library/' + item.title + '/folder.jpg'
             } else {
-                coverHttpPath = null
+                coverHttpPath = '/no-image.jpg'
             }
             data.push({
                 'title': item.title,
@@ -149,6 +149,20 @@ app.get('/anime/v2/:title', (req, res) => {
     res.json({
         'data': data
     })
+})
+
+app.post('/anime/v2/update', (req, res) => {
+    const { title, status } = req.body
+    const rawdata = fs.readFileSync('DB.json')
+    let db = JSON.parse(rawdata)
+    let SelectByTitle = db.filter(item => item.title == title)[0]
+    db = db.filter(item => item.title != title)
+    SelectByTitle.status = status
+    db = [SelectByTitle, ...db]
+    db = db.sort((a, b) => { return (a.title > b.title ? 1 : -1) })
+    fs.writeFile('DB.json', JSON.stringify(db), () => {})
+
+    res.json(db)
 })
 
 app.listen(5000)
