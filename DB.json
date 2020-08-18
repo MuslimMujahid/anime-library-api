@@ -15,7 +15,7 @@
     {
         "dirname": "G:/Anime",
         "title": "Akame ga Kill! BD",
-        "status": "unfinished",
+        "status": "finished",
         "eps": [
             {
                 "epTitle": "Akame ga Kill! BD 01 720p.mkv",
@@ -31,15 +31,15 @@
             },
             {
                 "epTitle": "Akame ga Kill! BD 04 720p.mkv",
-                "watched": true
+                "watched": false
             },
             {
                 "epTitle": "Akame ga Kill! BD 05 720p.mkv",
-                "watched": true
+                "watched": false
             },
             {
                 "epTitle": "Akame ga Kill! BD 06 720p.mkv",
-                "watched": true
+                "watched": false
             },
             {
                 "epTitle": "Akame ga Kill! BD 07 720p.mkv",
@@ -47,7 +47,7 @@
             },
             {
                 "epTitle": "Akame ga Kill! BD 08 720p.mkv",
-                "watched": true
+                "watched": false
             },
             {
                 "epTitle": "Akame ga Kill! BD 09 720p.mkv",
@@ -55,11 +55,11 @@
             },
             {
                 "epTitle": "Akame ga Kill! BD 10 720p.mkv",
-                "watched": false
+                "watched": true
             },
             {
                 "epTitle": "Akame ga Kill! BD 11 720p.mkv",
-                "watched": false
+                "watched": true
             },
             {
                 "epTitle": "Akame ga Kill! BD 12 720p.mkv",
@@ -75,15 +75,15 @@
             },
             {
                 "epTitle": "Akame ga Kill! BD 15 720p.mkv",
-                "watched": false
+                "watched": true
             },
             {
                 "epTitle": "Akame ga Kill! BD 16 720p.mkv",
-                "watched": false
+                "watched": true
             },
             {
                 "epTitle": "Akame ga Kill! BD 17 720p.mkv",
-                "watched": false
+                "watched": true
             },
             {
                 "epTitle": "Akame ga Kill! BD 18 720p.mkv",
@@ -91,27 +91,27 @@
             },
             {
                 "epTitle": "Akame ga Kill! BD 19 720p.mkv",
-                "watched": false
+                "watched": true
             },
             {
                 "epTitle": "Akame ga Kill! BD 20 720p.mkv",
-                "watched": false
+                "watched": true
             },
             {
                 "epTitle": "Akame ga Kill! BD 21 720p.mkv",
-                "watched": false
+                "watched": true
             },
             {
                 "epTitle": "Akame ga Kill! BD 22 720p.mkv",
-                "watched": false
+                "watched": true
             },
             {
                 "epTitle": "Akame ga Kill! BD 23 720p.mkv",
-                "watched": false
+                "watched": true
             },
             {
                 "epTitle": "Akame ga Kill! BD 24 720p.mkv",
-                "watched": false
+                "watched": true
             }
         ],
         "cover": true,
@@ -124,15 +124,15 @@
         "eps": [
             {
                 "epTitle": "Akatsuki no Yona BD 01 720p.mkv",
-                "watched": false
+                "watched": true
             },
             {
                 "epTitle": "Akatsuki no Yona BD 02 720p.mkv",
-                "watched": false
+                "watched": true
             },
             {
                 "epTitle": "Akatsuki no Yona BD 03 720p.mkv",
-                "watched": false
+                "watched": true
             },
             {
                 "epTitle": "Akatsuki no Yona BD 04 720p.mkv",
