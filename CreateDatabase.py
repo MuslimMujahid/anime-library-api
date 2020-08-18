@@ -1,6 +1,6 @@
 from os import listdir
 import json
-from os.path import join, isfile
+from os.path import join, isfile, exists
 import operator
 
 targetDirs = ['E:/FILM/Anime', 'G:/Anime']
@@ -24,14 +24,21 @@ for targetDir in targetDirs:
                 'watched': False 
             })
         
+        cover = False
+        if exists(join(targetDir, dir, 'folder.jpg')):
+            cover = True
+
         jsonArray.append({
             'dirname': targetDir,
             'title': dir,
             'status': 'unwatched',
-            'eps': episodes
+            'eps': episodes,
+            'cover': cover
         })
 
 jsonArray = sorted(jsonArray, key=lambda k: k['title'])
+for (id, item) in enumerate(jsonArray):
+    item.update({'id': id})
 
 # print(jsonArray)
 with open('DB.json', 'w+') as output:
